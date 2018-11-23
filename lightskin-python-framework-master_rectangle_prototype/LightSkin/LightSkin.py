@@ -96,6 +96,9 @@ class ForwardModel(Measurable):
         eg. simulated values or real values from a prototype
     """
 
+    # TODO: what is 0.125?
+    sampleDistance = 0.125
+
     def __init__(self, ls: LightSkin):
         self.ls: LightSkin = ls
 

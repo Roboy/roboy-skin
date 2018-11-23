@@ -1,19 +1,15 @@
 #!/usr/bin/python3
-
 import csv
 import time
-
 import tkinter as tk
-
+from LightSkin.LightSkin import LightSkin, ValueMap
+from LightSkin.GUI import Views
 from LightSkin.Algorithm.RayInfluenceModels.DirectSampledRayGridInfluenceModel import DirectSampledRayGridInfluenceModel
 from LightSkin.Algorithm.Reconstruction.LogarithmicLinSysOptimize2 import LogarithmicLinSysOptimize2
 from LightSkin.Algorithm.Reconstruction.SimpleRepeatedDistributeBackProjection import SimpleRepeatedDistributeBackProjection
 from LightSkin.Algorithm.Reconstruction.SimpleRepeatedLogarithmicBackProjection import SimpleRepeatedLogarithmicBackProjection
-from LightSkin.LightSkin import LightSkin, ValueMap
-from LightSkin.GUI import Views
-
-from LightSkin.Algorithm.ForwardModels.SimpleProportionalForwardModel import SimpleProportionalForwardModel, \
-    SimpleIdealProportionalCalibration
+from LightSkin.Algorithm.ForwardModels.SimpleProportionalForwardModel import SimpleProportionalForwardModel
+from LightSkin.Algorithm.ForwardModels.Calibration.SimpleIdealProportionalCalibration import SimpleIdealProportionalCalibration
 from LightSkin.Algorithm.Reconstruction.SimpleBackProjection import SimpleBackProjection
 
 # Source: https://code.activestate.com/recipes/410687-transposing-a-list-of-lists-with-different-lengths/

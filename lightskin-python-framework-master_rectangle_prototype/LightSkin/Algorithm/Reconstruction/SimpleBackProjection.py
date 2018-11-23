@@ -1,5 +1,3 @@
-import math
-
 from ..RayInfluenceModels.RayInfluenceModel import RayGridInfluenceModel
 from ...LightSkin import BackwardModel, LightSkin, Calibration
 

@@ -15,6 +15,8 @@ const int SAMPLES = 20;
 const int LEDs_num = sizeof(LEDs) / sizeof(int);
 const int Sensors_num = sizeof(Sensors) / sizeof(int);
 float zeroValues[Sensors_num];
+float allValues_Old[LEDs_num][Sensors_num];
+float allValues_delta[LEDs_num][Sensors_num];
 float allValues[LEDs_num][Sensors_num];
 int lastLED = LEDs[0];
 long sum;
@@ -93,7 +95,8 @@ void loop() {
         sum += v;
       }
       value = (float) sum / SAMPLES;
-
+      // Save last measurements for comparison
+      allValues_Old[l][s] = allValues[l][s];
       allValues[l][s] = max(0, value - zeroValues[s]);
       Serial.print(" : ");
       Serial.println(allValues[l][s]);
@@ -103,15 +106,30 @@ void loop() {
   }
   digitalWrite(lastLED, LED_OFF);
 
-  /*-------------------------------------------------*/
+/*-------------------------------------------------*/
   // Print the measurements to Serial
-  Serial.print("Snapshot: ");
+  Serial.print("Matrix snapshot: ");
   Serial.print(LEDs_num);
-  Serial.print(',');
+  Serial.print("x");
   Serial.print(Sensors_num);
   Serial.println();
 
+  int next_sensor = 60;
+  for(s = 0; s < Sensors_num; s++){
+    if (next_sensor < 54 ) break;
+    Serial.print("    ");
+    Serial.print(next_sensor);
+    Serial.print(",");
+    next_sensor -= 1;
+  }
+
+  int next_led = 27;
+  Serial.println();
+  
   for(l = 0; l < LEDs_num; l++){
+    Serial.print(next_led);
+    Serial.print("  ");
+    next_led += 2;
     for(s = 0; s < Sensors_num; s++){
       Serial.print(allValues[l][s], 2);
       Serial.print(',');
@@ -119,8 +137,41 @@ void loop() {
     Serial.println();
   }
   Serial.println();
-  /*-------------------------------------------------*/
+
+/*-------------------------------------------------*/
+// Print delta of measurements to Serial
+Serial.print("Matrix of deltas");
+Serial.print(LEDs_num);
+Serial.print("x");
+Serial.print(Sensors_num);
+Serial.println();
+
+int next_sensor = 60;
+  for(s = 0; s < Sensors_num; s++){
+    if (next_sensor < 54 ) break;
+    Serial.print("    ");
+    Serial.print(next_sensor);
+    Serial.print(",");
+    next_sensor -= 1;
+  }
+
+int next_led = 27;
+  Serial.println();
+  for(l = 0; l < LEDs_num; l++){
+    Serial.print(next_led);
+    Serial.print("  ");
+    next_led += 2;
+    for(s = 0; s < Sensors_num; s++){
+      allValues_delta[l][s] = allValues[l][s] - allValues_Old[l][s];
+      Serial.print(allValues_delta[l][s], 2);
+      Serial.print(',');
+    }
+    Serial.println();
+  }
+  Serial.println();
+
+/*-------------------------------------------------*/
 
   // Wait for the next snapshot to be taken
-  delay(200);
+  delay(3000);
 }
