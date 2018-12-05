@@ -6,12 +6,13 @@ import tkinter as tk
 
 from LightSkin.Algorithm.RayInfluenceModels.DirectSampledRayGridInfluenceModel import DirectSampledRayGridInfluenceModel
 from LightSkin.Algorithm.Reconstruction.LogarithmicLinSysOptimize2 import LogarithmicLinSysOptimize2
+from LightSkin.Algorithm.Reconstruction.SimpleRepeatedDistributeBackProjection import SimpleRepeatedDistributeBackProjection
+
 from LightSkin.LightSkin import LightSkin
 from LightSkin.GUI import Views
-
-# from SimpleProportionalForwardModel import SimpleProportionalForwardModel
 from LightSkin.Algorithm.ForwardModels.ArduinoConnectorForwardModel import ArduinoConnectorForwardModel
-from LightSkin.Algorithm.SimpleCalibration import SimpleCalibration
+from LightSkin.Algorithm.ForwardModels.Calibration.SimpleCalibration import SimpleCalibration
+from LightSkin.Algorithm.Reconstruction.SimpleBackProjection import SimpleBackProjection
 import serial.tools.list_ports
 
 
@@ -43,27 +44,32 @@ ls = LightSkin()
 
 # LOAD Sensor and LED coordinates from CSV
 
-with open('sensors.csv', 'r') as csvfile:
+with open('CSV_Files/sensors.csv', 'r') as csvfile:
     read = csv.reader(csvfile)
     for r in read:
         s = (float(r[0]), float(r[1]))
         ls.sensors.append(s)
 #
-with open('leds.csv', 'r') as csvfile:
+with open('CSV_Files/leds.csv', 'r') as csvfile:
     read = csv.reader(csvfile)
     for r in read:
         s = (float(r[0]), float(r[1]))
         ls.LEDs.append(s)
 
 recResolution = 7
+#recResolution = 10
 
 calibration = SimpleCalibration(ls)
 
 arduinoConnector = ArduinoConnectorForwardModel(ls, port[0], 1000000)
-backwardModel = LogarithmicLinSysOptimize2(ls,
-                                           recResolution, recResolution,
-                                           calibration,
-                                           DirectSampledRayGridInfluenceModel())
+backwardModel = SimpleBackProjection(ls, recResolution,
+                                     recResolution,
+                                       calibration,
+                                        DirectSampledRayGridInfluenceModel())
+#backwardModel = LogarithmicLinSysOptimize2(ls,
+ #                                         recResolution, recResolution,
+  #                                         calibration,
+   #                                       DirectSampledRayGridInfluenceModel())
 
 ls.forwardModel = arduinoConnector
 ls.backwardModel = backwardModel

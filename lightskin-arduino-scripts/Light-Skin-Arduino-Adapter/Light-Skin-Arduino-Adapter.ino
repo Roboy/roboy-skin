@@ -64,6 +64,7 @@ void loop() {
     for(i = 0; i < SAMPLES; i++){
       long v = analogRead(sensor);
       sum += v;
+      delay(1);
     }
     value = (float) sum / SAMPLES;
 
@@ -76,6 +77,7 @@ void loop() {
     // switch to new LED
     digitalWrite(lastLED, LED_OFF);
     digitalWrite(led, LED_ON);
+    delay(4);
 
     // Measure all sensors
     for(s = 0; s < Sensors_num; s++){

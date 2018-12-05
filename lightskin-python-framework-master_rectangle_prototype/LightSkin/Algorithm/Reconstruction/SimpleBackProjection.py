@@ -7,6 +7,7 @@ class SimpleBackProjection(BackwardModel):
 
     MIN_SENSITIVITY = 0.02
     UNKNOWN_VAL = 1.0
+    TIME = 1
 
     def __init__(self,
                  ls: LightSkin,
@@ -44,8 +45,16 @@ class SimpleBackProjection(BackwardModel):
                 # To reduce "noise" in low-knowledge-areas
                 #val = self.UNKNOWN_VAL + (val - self.UNKNOWN_VAL) * (1 - 1 / (w * self.sampleDistance + 1))
                 line[i] = val
+                if line[i] > 1.0:
+                    line[i] = 1.0
+                if line[i] > 0.99:
+                    line[i] = 1.0
+
 
         self.grid = self._tmpGrid
+        print(self.grid)
+        #print("Finished projection %i", self.TIME)
+        self.TIME += 1
 
         return True
 

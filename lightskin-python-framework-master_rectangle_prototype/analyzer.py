@@ -28,20 +28,20 @@ ls = LightSkin()
 
 # LOAD Sensor and LED coordinates from CSV
 
-with open('sensors.csv', 'r') as csvfile:
+with open('CSV_Files/sensors.csv', 'r') as csvfile:
     read = csv.reader(csvfile)
     for r in read:
         s = (float(r[0]), float(r[1]))
         ls.sensors.append(s)
 #
-with open('leds.csv', 'r') as csvfile:
+with open('CSV_Files/leds.csv', 'r') as csvfile:
     read = csv.reader(csvfile)
     for r in read:
         s = (float(r[0]), float(r[1]))
         ls.LEDs.append(s)
 
 gridVals = []
-with open('translucency.csv', 'r') as csvfile:
+with open('CSV_Files/translucency.csv', 'r') as csvfile:
     read = csv.reader(csvfile)
     for r in read:
         vals = list(map(float, r))
