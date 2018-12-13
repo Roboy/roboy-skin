@@ -1,3 +1,4 @@
 .idea/
 __pycache__/
+python36/
 *.pyc
