@@ -80,7 +80,7 @@ def create_serial_obj(portPath, baud_rate, tout):
 def read_serial_line(serial):
     
     serial_data = serial.readline();
-    #serial_data = serial_data.decode("utf-8") #ser.readline returns a binary, convert to string
+    serial_data = serial_data.decode("utf-8") #ser.readline returns a binary, convert to string
     #print (serial_data)
     return serial_data
 
@@ -88,78 +88,20 @@ print ("Creating serial object...")
 serial_obj = create_serial_obj(portPath, baud, timeout)
 
 def talker():
+    pub = rospy.Publisher('chatter', String, queue_size=10)
     rospy.init_node('talker', anonymous=True)
-    pub = rospy.Publisher('chatter', Float32MultiArray, queue_size=10)
     rate = rospy.Rate(10) # 10hz
-
-
+	
 	#ma = np.random.random((10,10))
     
 	
     while not rospy.is_shutdown():
-        #serial_data = read_serial_line(serial_obj)
-        # LED = "LED-%s" % np.random.random((10,10))
-        # SEN = "SEN-%s" % np.random.random((10,10))
-        # DATA = LED + "\n" + SEN
-
-        m = 0
-        n = 0
-
-        while (True):
-
-            serial_data = read_serial_line(serial_obj)
-
-            if "Snapshot" in serial_data:
-                m = int(serial_data[-3])
-                n = int(serial_data[-5])
-                print(m, n)
-                break
-
-        while (True):
-            serial_data = read_serial_line(serial_obj)
-            row_data = []
-            unclean_data = []
-            clean_data = []
-
-            first_unclean_data = []
-            first_clean_data = []
-
-            if "Snapshot" not in serial_data:
-
-                first_unclean_data = (serial_data.split(','))
-                first_unclean_data.pop()
-
-                #         print(first_unclean_data)
-                #         print("++++++++++++++++++++++++++++++++")
-                for x in range(m):
-                    #             print(x)
-                    serial_data = read_serial_line(serial_obj)
-
-                    #             print(serial_data)
-                    #             print("----------------------------")
-                    unclean_data = (serial_data.split(','))
-                    unclean_data.pop()
-
-                    if unclean_data:
-                        clean_data.append(unclean_data)
-
-                clean_data.insert(0, first_unclean_data)
-
-
-            send_data = Float32MultiArray()
-            send_data.layout.dim.append(MultiArrayDimension())
-            send_data.layout.dim.append(MultiArrayDimension())
-            send_data.layout.dim[0].label = "LED"
-            send_data.layout.dim[1].label = "SEN"
-            send_data.layout.dim[0].size = m
-            send_data.layout.dim[1].size = n
-            send_data.layout.dim[0].stride = m * n
-            send_data.layout.dim[1].stride = m
-            send_data.layout.data_offset = 0
-            send_data.data = clean_data
-
-            rospy.loginfo(send_data)
-            pub.publish(send_data)
+        serial_data = read_serial_line(serial_obj)
+	#LED = "LED-%s" % np.random.random((10,10))
+	#SEN = "SEN-%s" % np.random.random((10,10))
+	#DATA = LED + "\n" + SEN
+        rospy.loginfo(serial_data)
+        pub.publish(serial_data)
         rate.sleep()
 
 if __name__ == '__main__':
