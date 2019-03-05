@@ -46,6 +46,8 @@ from std_msgs.msg import String
 from std_msgs.msg import Float32MultiArray
 from std_msgs.msg import MultiArrayDimension
 
+import random
+
 ports = list(serial.tools.list_ports.comports())
 port = None
 
@@ -80,8 +82,7 @@ def create_serial_obj(portPath, baud_rate, tout):
 def read_serial_line(serial):
     
     serial_data = serial.readline();
-    #serial_data = serial_data.decode("utf-8") #ser.readline returns a binary, convert to string
-    #print (serial_data)
+    
     return serial_data
 
 print ("Creating serial object...")
@@ -93,14 +94,11 @@ def talker():
     rate = rospy.Rate(10) # 10hz
 
 
-	#ma = np.random.random((10,10))
+	
     
 	
     while not rospy.is_shutdown():
-        #serial_data = read_serial_line(serial_obj)
-        # LED = "LED-%s" % np.random.random((10,10))
-        # SEN = "SEN-%s" % np.random.random((10,10))
-        # DATA = LED + "\n" + SEN
+        
 
         m = 0
         n = 0
@@ -123,6 +121,7 @@ def talker():
 
             first_unclean_data = []
             first_clean_data = []
+            ultimate_data = []
 
             if "Snapshot" not in serial_data:
 
@@ -144,22 +143,37 @@ def talker():
                         clean_data.append(unclean_data)
 
                 clean_data.insert(0, first_unclean_data)
-
-
-            send_data = Float32MultiArray()
-            send_data.layout.dim.append(MultiArrayDimension())
-            send_data.layout.dim.append(MultiArrayDimension())
-            send_data.layout.dim[0].label = "LED"
-            send_data.layout.dim[1].label = "SEN"
-            send_data.layout.dim[0].size = m
-            send_data.layout.dim[1].size = n
-            send_data.layout.dim[0].stride = m * n
-            send_data.layout.dim[1].stride = m
-            send_data.layout.data_offset = 0
-            send_data.data = clean_data
-
-            rospy.loginfo(send_data)
-            pub.publish(send_data)
+                #make the string into float
+                clean_data = [map(float,i) for i in clean_data]
+                #put them into an array
+                data_array = np.array(clean_data)
+                
+                mat_size= m*n
+                send_data = Float32MultiArray()
+                send_data.layout.dim.append(MultiArrayDimension())
+                send_data.layout.dim.append(MultiArrayDimension())
+                send_data.layout.dim[0].label = "LED"
+                send_data.layout.dim[1].label = "SEN"
+                send_data.layout.dim[0].size = m
+                send_data.layout.dim[1].size = n
+                send_data.layout.dim[0].stride = m * n
+                send_data.layout.dim[1].stride = m
+                send_data.layout.data_offset = 0
+                send_data.data = [0]* mat_size
+                
+                # save a few dimensions:
+                dstride0 = send_data.layout.dim[0].stride
+                dstride1 = send_data.layout.dim[1].stride
+                offset = send_data.layout.data_offset
+                #put the datat back into matrix formate    
+                for i in range(m):
+                    for j in range(n):
+                        
+                        send_data.data[offset + i + dstride1*j] = data_array[i][j]
+                        
+                pub.publish(send_data)
+                rospy.loginfo("Publishing..")
+                
         rate.sleep()
 
 if __name__ == '__main__':
