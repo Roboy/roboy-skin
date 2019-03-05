@@ -19,11 +19,7 @@ def callback(data):
 
 def reconstruction(data):
     arduino_data = data.data
-
     # recosntruction
-
-    #just to test dummy reconstruction 
-    #have to delete when the actual reconstruction is implemented
     arduino_data = np.array(arduino_data)
     arduino_data = arduino_data + 0.12
     
@@ -43,7 +39,15 @@ def reconstruction(data):
     reconstruction_data.layout.data_offset = 0
     reconstruction_data.data = arduino_data #[0]* mat_size
     
-
+    # save a few dimensions:
+    """ dstride0 = reconstruction_data.layout.dim[0].stride
+    dstride1 = reconstruction_data.layout.dim[1].stride
+    offset = reconstruction_data.layout.data_offset
+    #put the datat back into matrix formate    
+    for i in range(m):
+        for j in range(n):
+            
+            reconstruction_data.data[offset + i + dstride1*j] = arduino_data[i][j] """
 
     print ("--------Start of Reconstruction data------")
     rospy.loginfo(reconstruction_data)
