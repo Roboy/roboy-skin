@@ -3,25 +3,29 @@
 
 import rospy
 import numpy as np
+import random
 from std_msgs.msg import String
 from std_msgs.msg import Float32MultiArray
 from std_msgs.msg import MultiArrayDimension
 
 
-started = False
-pub = rospy.Publisher('reconstriction', Float32MultiArray, queue_size=1000)
+pub = rospy.Publisher('reconstruction', Float32MultiArray, queue_size=1000)
 m=7 #have to create dynamically later
 n=7 #have to create dynamically later
 
 def callback(data):
-    rospy.loginfo(rospy.get_caller_id() + 'I heard %s', data)
+    #rospy.loginfo(rospy.get_caller_id() + 'I heard %s', data)
     reconstruction(data)
 
 def reconstruction(data):
     arduino_data = data.data
+
     # recosntruction
+    
     arduino_data = np.array(arduino_data)
-    arduino_data = arduino_data + 0.12
+    for i in range (len(arduino_data)):
+        #print(i)
+        arduino_data[i]= arduino_data[i] + random.uniform(0.1, 0.9)
     
     #reconstruction end here
 
@@ -49,9 +53,9 @@ def reconstruction(data):
             
             reconstruction_data.data[offset + i + dstride1*j] = arduino_data[i][j] """
 
-    print ("--------Start of Reconstruction data------")
-    rospy.loginfo(reconstruction_data)
-    print ("---------End of Reconstruction data ------")
+    #print ("--------Start of Reconstruction data------")
+    #rospy.loginfo(reconstruction_data)
+    #print ("---------End of Reconstruction data ------")
     pub.publish(reconstruction_data)
     
 
