@@ -38,7 +38,7 @@ def rviz_visualizer(data):
     pos_count=0
     for i in range(7):
         for j in range(7):
-            map_array=[i-4 , j-4, reconstructed_data[pos_count]]
+            map_array=[i-4 , j-4, round(reconstructed_data[pos_count],3)]
             #print(map_array)
             pos_count = pos_count+1
             cloud_points.append(map_array)
@@ -60,7 +60,7 @@ def rviz_visualizer(data):
     #rospy.loginfo(scaled_polygon_pcl)
     pcl_pub.publish(scaled_polygon_pcl)
     del cloud_points[:]
-    sleep(0.1)
+    #sleep(0.1)
 
 
     #rospy.spin()
