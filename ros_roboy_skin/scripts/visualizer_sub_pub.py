@@ -19,14 +19,15 @@ from std_msgs.msg import MultiArrayDimension
 
 cloud_points = []
 pub = rospy.Publisher('reconstruction', Float32MultiArray, queue_size=1000)
-m=7 #have to create dynamically later
-n=7 #have to create dynamically later
+
 
 def callback(data):
     #rospy.loginfo(rospy.get_caller_id() + 'I heard %s', data)
     rviz_visualizer(data)
 
 def rviz_visualizer(data):
+    m= data.layout.dim[0].size     #getting array widht from the reconstruction publisher
+    n= data.layout.dim[1].size     #getting array height from the reconstruction publisher
     reconstructed_data = data.data
     #print(reconstructed_data)
     
@@ -34,11 +35,12 @@ def rviz_visualizer(data):
     
     pcl_pub = rospy.Publisher("/my_pcl_topic", PointCloud2)
     rospy.loginfo("Initializing sample pcl2 publisher node...")
-    #creat a 7 by 7 matrix
+    #creat a m by n matrix
     pos_count=0
-    for i in range(7):
-        for j in range(7):
-            map_array=[i-4 , j-4, round(reconstructed_data[pos_count],3)]
+    for i in range(m):
+        for j in range(n):
+            #creating point cloud using the format [x position , y position , reconstructin data in z as color intensity]
+            map_array=[i-4 , j-4, round(reconstructed_data[pos_count],3)] 
             #print(map_array)
             pos_count = pos_count+1
             cloud_points.append(map_array)

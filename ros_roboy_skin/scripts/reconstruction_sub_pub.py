@@ -21,9 +21,6 @@ def reconstruction(data):
     m= data.layout.dim[0].size     #getting array widht from the arduino publisher
     n= data.layout.dim[1].size     #getting array height from the arduino publisher
 
-    print("m and n")
-    print(m)
-    print(n)
     arduino_data = data.data
 
     # recosntruction
