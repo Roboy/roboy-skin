@@ -10,14 +10,20 @@ from std_msgs.msg import MultiArrayDimension
 
 
 pub = rospy.Publisher('reconstruction', Float32MultiArray, queue_size=1000)
-m=7 #have to create dynamically later
-n=7 #have to create dynamically later
+
 
 def callback(data):
+    #this function is called when the lisner is called and it also call the reconstruction
     #rospy.loginfo(rospy.get_caller_id() + 'I heard %s', data)
     reconstruction(data)
 
 def reconstruction(data):
+    m= data.layout.dim[0].size     #getting array widht from the arduino publisher
+    n= data.layout.dim[1].size     #getting array height from the arduino publisher
+
+    print("m and n")
+    print(m)
+    print(n)
     arduino_data = data.data
 
     # recosntruction
