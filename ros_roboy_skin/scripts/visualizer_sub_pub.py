@@ -33,7 +33,7 @@ def rviz_visualizer(data):
     
    
     
-    pcl_pub = rospy.Publisher("/my_pcl_topic", PointCloud2)
+    pcl_pub = rospy.Publisher("/skin_visualizer", PointCloud2)
     rospy.loginfo("Initializing sample pcl2 publisher node...")
     #creat a m by n matrix
     pos_count=0
