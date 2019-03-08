@@ -49,7 +49,7 @@ with open('CSV_Files/translucency.csv', 'r') as csvfile:
 translucency = ValueMap(ls.getGridArea(), grid=transposed(gridVals))
 ls.translucencyMap = translucency
 
-recSize = 7
+recSize = 10
 repetitions = 20
 
 ls.forwardModel = SimpleProportionalForwardModel(ls, DirectSampledRayGridInfluenceModel())
@@ -106,20 +106,41 @@ topViewsFrame.pack(side=tk.TOP)
 topViews2Frame = tk.Frame(window)
 topViews2Frame.pack(side=tk.TOP)
 
-topViewTransl = Views.LightSkinTopView(topViewsFrame, ls, highlightbackground='#aaa', highlightthickness=1,
+
+'''topViewTransl = Views.LightSkinTopView(topViewsFrame, ls, highlightbackground='#aaa', highlightthickness=1,
                                        width=300, height=300,
                                        measurable_grid=ls.translucencyMap,
                                        display_function=Views.Colorscales.MPColorMap(pressure_colormap)
                                        )
 topViewTransl.pack(side=tk.LEFT)
-
-topView = Views.LightSkinTopView(topViewsFrame, ls, highlightbackground='#aaa', highlightthickness=1,
+'''
+'''topView = Views.LightSkinTopView(topViewsFrame, ls, highlightbackground='#aaa', highlightthickness=1,
                                  width=300, height=300,
                                  gridWidth=50, gridHeight=50,
                                  display_function=Views.Colorscales.MPColorMap('plasma', lambda x: x ** 0.5),
                                  measure_function=ls.forwardModel.measureAtPoint
                                  )
-topView.pack(side=tk.LEFT)
+topView.pack(side=tk.LEFT)'''
+T = tk.Text(topViewsFrame, height=2, width=10)
+T.pack(side=tk.TOP)
+T.insert(tk.END, "Point 2x7")
+
+
+T = tk.Text(topViewsFrame, height=2, width=30)
+T.pack(side=tk.TOP, anchor="w")
+T.insert(tk.END, "Simple Backprojection")
+T = tk.Text(topViewsFrame, height=2, width=40)
+T.pack(side=tk.TOP, anchor="e")
+T.insert(tk.END, "Repeated Logarithmic BackProjection")
+
+
+T = tk.Text(topViews2Frame, height=2, width=60)
+T.pack(side=tk.TOP, anchor="w")
+T.insert(tk.END, "Repeated Distributed BackProjection")
+T = tk.Text(topViews2Frame, height=2, width=30)
+T.pack(side=tk.TOP, anchor="e")
+T.insert(tk.END, "Linear System")
+
 
 topViewReconstructed = Views.LightSkinTopView(topViewsFrame, ls, highlightbackground='#aaa', highlightthickness=1,
                                               width=300, height=300,
@@ -128,7 +149,7 @@ topViewReconstructed = Views.LightSkinTopView(topViewsFrame, ls, highlightbackgr
                                               )
 topViewReconstructed.pack(side=tk.LEFT)
 
-topViewReconstructed2 = Views.LightSkinTopView(topViews2Frame, ls, highlightbackground='#aaa', highlightthickness=1,
+topViewReconstructed2 = Views.LightSkinTopView(topViewsFrame, ls, highlightbackground='#aaa', highlightthickness=1,
                                                width=300, height=300,
                                                measurable_grid=repeated,
                                                display_function=Views.Colorscales.MPColorMap(pressure_colormap),

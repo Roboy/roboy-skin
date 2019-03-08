@@ -13,7 +13,7 @@ class ArduinoConnectorForwardModel(ForwardModel):
         After reading all LEDs x Sensors combinations, the onUpdate is triggered.
     """
 
-    MAX_VALUE = 1024
+    MAX_VALUE = 1023
 
     def __init__(self, ls: LightSkin, port: str, baudrate: int):
         super().__init__(ls)

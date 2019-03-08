@@ -43,6 +43,7 @@ class SimpleRepeatedLogarithmicBackProjection(BackwardModel):
                 self.grid[i][j] = math.exp(self._bufGrid[i][j])
                 # print("Resulting value %i %i : %f" % (i, j, self.grid[i][j]))
 
+
         return True
 
     def _calculate_iteration(self):
@@ -80,6 +81,7 @@ class SimpleRepeatedLogarithmicBackProjection(BackwardModel):
         translucency = 0
         for (i, j), w in cells:
             # weighted factorization
+            w = 1.0
             translucency += self._bufGrid[i][j] * w
 
         return min(0.0, translucency)
@@ -112,6 +114,7 @@ class SimpleRepeatedLogarithmicBackProjection(BackwardModel):
             rest_translucency = .0
 
             for (i, j), w in cells:
+                w = 1.0
                 if self._bufGrid[i][j] + d_transl > 0:  # max out at 0; cell can't take anymore
                     t = -self._bufGrid[i][j]
                     # t thus us the max the cell can still take
@@ -128,8 +131,12 @@ class SimpleRepeatedLogarithmicBackProjection(BackwardModel):
 
         # all remaining cells get the current d_transl
         for (i, j), w in cells:
+            w = 1.0
             cells_finished.append(((i, j), w, d_transl))
 
         for (i, j), w, f in cells_finished:
+            w = 1.0
             self._tmpGrid[i][j] += f * w
             self._tmpGridWeights[i][j] += w
+
+

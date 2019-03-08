@@ -1,6 +1,6 @@
 from ..RayInfluenceModels.RayInfluenceModel import RayGridInfluenceModel
 from ...LightSkin import BackwardModel, LightSkin, Calibration
-
+import csv
 
 class SimpleBackProjection(BackwardModel):
     """ Implements the back projection approach where the value is equally distributed along each ray """
@@ -45,10 +45,11 @@ class SimpleBackProjection(BackwardModel):
                 # To reduce "noise" in low-knowledge-areas
                 #val = self.UNKNOWN_VAL + (val - self.UNKNOWN_VAL) * (1 - 1 / (w * self.sampleDistance + 1))
                 line[i] = val
-                if line[i] > 1.0:
+                '''if line[i] > 1.0:
                     line[i] = 1.0
+
                 if line[i] > 0.99:
-                    line[i] = 1.0
+                    line[i] = 1.0'''
 
 
         self.grid = self._tmpGrid
@@ -67,5 +68,6 @@ class SimpleBackProjection(BackwardModel):
 
         for (i, j), w in cells:
             # weighted factorization
+            w = 1.0
             self._tmpGrid[i][j] += dfactor * w
             self._tmpGridWeights[i][j] += w

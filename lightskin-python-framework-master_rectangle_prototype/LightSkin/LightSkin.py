@@ -10,7 +10,7 @@ from .Helpers.EventHook import EventHook
 from .Helpers.Grids import ValueGridAreaDefinition
 from .Helpers.Measurable import Measurable
 from .Helpers.ValueMap import ValueMap
-
+import csv
 
 class LightSkin:
     """ Container describing the setup and status of a LightSkin """
@@ -110,8 +110,15 @@ class ForwardModel(Measurable):
         raise NotImplementedError("Method not yet implemented")
 
     def getSensorValue(self, sensor: int, led: int = -1) -> float:
-        s = self.ls.sensors[sensor]
-        return self.measureLEDAtPoint(s[0], s[1], led)
+        #s = self.ls.sensors[sensor]
+        #return self.measureLEDAtPoint(s[0], s[1], led)
+        gridVals = []
+        with open('CSV_Files/translucency.csv', 'r') as csvfile:
+            read = csv.reader(csvfile)
+            for r in read:
+                vals = list(map(float, r))
+                gridVals.append(vals)
+        return gridVals[led][sensor]
 
     pass
 
