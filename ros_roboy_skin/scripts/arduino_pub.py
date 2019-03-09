@@ -108,8 +108,8 @@ def talker():
             serial_data = read_serial_line(serial_obj)
 
             if "Snapshot" in serial_data:
-                m = int(serial_data[-3])
-                n = int(serial_data[-5])
+                m = 12 #int(serial_data[-3])
+                n = 12 #int(serial_data[-5])
                 print(m, n)
                 break
 

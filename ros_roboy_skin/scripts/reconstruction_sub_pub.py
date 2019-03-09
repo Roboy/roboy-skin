@@ -28,7 +28,7 @@ def reconstruction(data):
     arduino_data = np.array(arduino_data)
     for i in range (len(arduino_data)):
         #print(i)
-        arduino_data[i]= arduino_data[i] + round(random.uniform(0.1, 0.9),3)
+        arduino_data[i]= round((arduino_data[i] + random.uniform(0.1, 0.9)),3)
     
     #reconstruction end here
 

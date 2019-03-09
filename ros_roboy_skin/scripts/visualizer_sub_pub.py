@@ -30,8 +30,9 @@ def rviz_visualizer(data):
     n= data.layout.dim[1].size     #getting array height from the reconstruction publisher
     reconstructed_data = data.data
     #print(reconstructed_data)
-    
-   
+
+    #normalized the data
+    norm_reconstructed_data = [float(i)/sum(reconstructed_data) for i in reconstructed_data]
     
     pcl_pub = rospy.Publisher("/skin_visualizer", PointCloud2)
     rospy.loginfo("Initializing sample pcl2 publisher node...")
@@ -40,7 +41,7 @@ def rviz_visualizer(data):
     for i in range(m):
         for j in range(n):
             #creating point cloud using the format [x position , y position , reconstructin data in z as color intensity]
-            map_array=[i-4 , j-4, round(reconstructed_data[pos_count],3)] 
+            map_array=[i-4 , j-4, round(norm_reconstructed_data[pos_count],3)] 
             #print(map_array)
             pos_count = pos_count+1
             cloud_points.append(map_array)
