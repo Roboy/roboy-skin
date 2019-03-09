@@ -70,8 +70,8 @@ def listener():
     # anonymous=True flag means that rospy will choose a unique
     # name for our 'listener' node so that multiple listeners can
     # run simultaneously.
-    rospy.init_node('listener', anonymous=True)
-    rospy.Subscriber('chatter', Float32MultiArray,  callback)
+    rospy.init_node('skin', anonymous=True)
+    rospy.Subscriber('arduino_data', Float32MultiArray,  callback)
 
     
 

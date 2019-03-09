@@ -89,8 +89,8 @@ print ("Creating serial object...")
 serial_obj = create_serial_obj(portPath, baud, timeout)
 
 def talker():
-    rospy.init_node('talker', anonymous=True)
-    pub = rospy.Publisher('chatter', Float32MultiArray, queue_size=10)
+    rospy.init_node('skin', anonymous=True)
+    pub = rospy.Publisher('arduino_data', Float32MultiArray, queue_size=10)
     rate = rospy.Rate(10) # 10hz
 
 
