@@ -16,3 +16,6 @@ This is done by individually turning on the LEDs and measuring all the analog in
 An average is taken over n measurements once again.
 Values are also taken without any LEDs turned on and subtracted from all subsequent measurements to reduce the influence of static light.
 The results are send via serial at 1 000 000 baud.
+
+Sensor LED placement for rectangular prototype.
+<img src="SensorLED.png" height="290">
