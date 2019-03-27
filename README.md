@@ -1,6 +1,8 @@
-### Calculate value.m
-line 1~13 are parameters for the model.
-line 8, line 10 should be ignored.
-line 9 press_pos is the postion where we press the skin.
-line 11 press_area is how hard we press the skin.
-variable 'Result' is the data matrix.
+# Roboy Skin
+
+This repository contains all software files related to the project Roboy Skin. It is consists of following sub-folders:
+
+* ROS - contains all files needed to connect a skin patch to Roboy ROS.
+* Simulation - contains Matlab files needed for simulating the behaviour of the skin.
+* Reconstructions - contains all files needed for reconstructing pressure points on the skin as well as reading and displaying the data.
+* Molding - contains all files needed for the creating the molds.
