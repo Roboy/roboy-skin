@@ -1,19 +1,15 @@
 #!/usr/bin/python3
-
 import csv
 import time
-
 import tkinter as tk
-
+from LightSkin.LightSkin import LightSkin, ValueMap
+from LightSkin.GUI import Views
 from LightSkin.Algorithm.RayInfluenceModels.DirectSampledRayGridInfluenceModel import DirectSampledRayGridInfluenceModel
 from LightSkin.Algorithm.Reconstruction.LogarithmicLinSysOptimize2 import LogarithmicLinSysOptimize2
 from LightSkin.Algorithm.Reconstruction.SimpleRepeatedDistributeBackProjection import SimpleRepeatedDistributeBackProjection
 from LightSkin.Algorithm.Reconstruction.SimpleRepeatedLogarithmicBackProjection import SimpleRepeatedLogarithmicBackProjection
-from LightSkin.LightSkin import LightSkin, ValueMap
-from LightSkin.GUI import Views
-
-from LightSkin.Algorithm.ForwardModels.SimpleProportionalForwardModel import SimpleProportionalForwardModel, \
-    SimpleIdealProportionalCalibration
+from LightSkin.Algorithm.ForwardModels.SimpleProportionalForwardModel import SimpleProportionalForwardModel
+from LightSkin.Algorithm.ForwardModels.Calibration.SimpleIdealProportionalCalibration import SimpleIdealProportionalCalibration
 from LightSkin.Algorithm.Reconstruction.SimpleBackProjection import SimpleBackProjection
 
 # Source: https://code.activestate.com/recipes/410687-transposing-a-list-of-lists-with-different-lengths/
@@ -31,20 +27,20 @@ ls = LightSkin()
 
 # LOAD Sensor and LED coordinates from CSV
 
-with open('sensors.csv', 'r') as csvfile:
+with open('CSV_Files/sensors.csv', 'r') as csvfile:
     read = csv.reader(csvfile)
     for r in read:
         s = (float(r[0]), float(r[1]))
         ls.sensors.append(s)
 #
-with open('leds.csv', 'r') as csvfile:
+with open('CSV_Files/leds.csv', 'r') as csvfile:
     read = csv.reader(csvfile)
     for r in read:
         s = (float(r[0]), float(r[1]))
         ls.LEDs.append(s)
 
 gridVals = []
-with open('translucency.csv', 'r') as csvfile:
+with open('CSV_Files/translucency.csv', 'r') as csvfile:
     read = csv.reader(csvfile)
     for r in read:
         vals = list(map(float, r))
@@ -110,20 +106,41 @@ topViewsFrame.pack(side=tk.TOP)
 topViews2Frame = tk.Frame(window)
 topViews2Frame.pack(side=tk.TOP)
 
-topViewTransl = Views.LightSkinTopView(topViewsFrame, ls, highlightbackground='#aaa', highlightthickness=1,
+
+'''topViewTransl = Views.LightSkinTopView(topViewsFrame, ls, highlightbackground='#aaa', highlightthickness=1,
                                        width=300, height=300,
                                        measurable_grid=ls.translucencyMap,
                                        display_function=Views.Colorscales.MPColorMap(pressure_colormap)
                                        )
 topViewTransl.pack(side=tk.LEFT)
-
-topView = Views.LightSkinTopView(topViewsFrame, ls, highlightbackground='#aaa', highlightthickness=1,
+'''
+'''topView = Views.LightSkinTopView(topViewsFrame, ls, highlightbackground='#aaa', highlightthickness=1,
                                  width=300, height=300,
                                  gridWidth=50, gridHeight=50,
                                  display_function=Views.Colorscales.MPColorMap('plasma', lambda x: x ** 0.5),
                                  measure_function=ls.forwardModel.measureAtPoint
                                  )
-topView.pack(side=tk.LEFT)
+topView.pack(side=tk.LEFT)'''
+T = tk.Text(topViewsFrame, height=2, width=10)
+T.pack(side=tk.TOP)
+T.insert(tk.END, "Point 2x7")
+
+
+T = tk.Text(topViewsFrame, height=2, width=30)
+T.pack(side=tk.TOP, anchor="w")
+T.insert(tk.END, "Simple Backprojection")
+T = tk.Text(topViewsFrame, height=2, width=40)
+T.pack(side=tk.TOP, anchor="e")
+T.insert(tk.END, "Repeated Logarithmic BackProjection")
+
+
+T = tk.Text(topViews2Frame, height=2, width=60)
+T.pack(side=tk.TOP, anchor="w")
+T.insert(tk.END, "Repeated Distributed BackProjection")
+T = tk.Text(topViews2Frame, height=2, width=30)
+T.pack(side=tk.TOP, anchor="e")
+T.insert(tk.END, "Linear System")
+
 
 topViewReconstructed = Views.LightSkinTopView(topViewsFrame, ls, highlightbackground='#aaa', highlightthickness=1,
                                               width=300, height=300,
@@ -132,7 +149,7 @@ topViewReconstructed = Views.LightSkinTopView(topViewsFrame, ls, highlightbackgr
                                               )
 topViewReconstructed.pack(side=tk.LEFT)
 
-topViewReconstructed2 = Views.LightSkinTopView(topViews2Frame, ls, highlightbackground='#aaa', highlightthickness=1,
+topViewReconstructed2 = Views.LightSkinTopView(topViewsFrame, ls, highlightbackground='#aaa', highlightthickness=1,
                                                width=300, height=300,
                                                measurable_grid=repeated,
                                                display_function=Views.Colorscales.MPColorMap(pressure_colormap),

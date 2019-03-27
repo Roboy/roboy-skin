@@ -1,14 +1,12 @@
 from functools import lru_cache
 from typing import Tuple, List, Dict
-
-import math
-
 from .RayInfluenceModel import RayGridInfluenceModel, Ray
 
 
 class DirectSampledRayGridInfluenceModel(RayGridInfluenceModel):
     """
-        Calculates the weights of the grid cells by sampling along the direct path of the ray
+        For this ray model, we assume a single, direct path from the LED to the sensor.
+        This method calculates the weights of the grid cells by sampling along the direct path of the ray
         and summing up the grid elements hit
     """
 

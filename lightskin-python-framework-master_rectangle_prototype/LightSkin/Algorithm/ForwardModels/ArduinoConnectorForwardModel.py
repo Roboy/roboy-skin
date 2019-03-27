@@ -1,5 +1,3 @@
-import math
-
 import re
 from threading import Thread
 
@@ -8,12 +6,14 @@ from ...LightSkin import ForwardModel, LightSkin, EventHook
 
 
 class ArduinoConnectorForwardModel(ForwardModel):
-    """ Connects to an Arduino running the Arduino Connector Script on the given port with the given baudrate
-        Parses the input in a new thread and updates its values accordingly.
-        After each full received frame, the onUpdate is triggered. """
+    """
+        This class enables the communication to an Arduino running the Arduino Connector Script
+        on the given port with the given baudrate.
+        It parses the input in a new thread and updates its values accordingly.
+        After reading all LEDs x Sensors combinations, the onUpdate is triggered.
+    """
 
-    sampleDistance = 0.125
-    MAX_VALUE = 1024
+    MAX_VALUE = 1023
 
     def __init__(self, ls: LightSkin, port: str, baudrate: int):
         super().__init__(ls)
@@ -47,6 +47,13 @@ class ArduinoConnectorForwardModel(ForwardModel):
             pass
 
     def _readLoop(self):
+        """
+            This method reads the Serial data input from the Arduino.
+            The parsing is triggered when a line 'Snapshot x,x' is read.
+            Every row corresponds to the measurements of each sensor when a specific LED is on.
+            All sensor values are normalized on a scale from 0-1.
+        """
+
         print('Read Loop started')
         while self._readerThreadRun:
             line = self.ser.readline()
@@ -65,17 +72,24 @@ class ArduinoConnectorForwardModel(ForwardModel):
                             for s in range(sensors):
                                 val = float(vals[s]) / self.MAX_VALUE if s < len(vals) else 0.0
                                 self._sensorValues[l][s] = min(1.0, max(0.0, val))
-                        print("received data")
+                        #print("received data")
                         self.onUpdate()
                     except Exception as e:
                         print(e)
         print('Read Loop finished')
 
+    # TODO: not elegant
     def measureLEDAtPoint(self, x: float, y: float, led: int = -1) -> float:
+        """
+            This method simulates sensor values and is not needed in this class.
+        """
         # No measurement possible
         return 0.0
 
     def getSensorValue(self, sensor: int, led: int = -1) -> float:
+        """
+            This inherited method returns the measured value for sensor and LED combination (one element in matrix).
+        """
         if led < 0:
             led = self.ls.selectedLED
         return self._sensorValues[led][sensor]

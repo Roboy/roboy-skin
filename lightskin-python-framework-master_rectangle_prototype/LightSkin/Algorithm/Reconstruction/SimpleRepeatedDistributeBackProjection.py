@@ -38,6 +38,7 @@ class SimpleRepeatedDistributeBackProjection(SimpleRepeatedBackProjection):
             rest_factor = 1.0
 
             for (i, j), w in cells:
+                w = 1.0
                 if self._bufGrid[i][j] * dfactor > 1:  # max out at 1; cell can't take anymore
                     #print('Doesnt fit cell %f %f' % (self._bufGrid[i][j] * dfactor, dfactor))
                     f = 1 / self._bufGrid[i][j]
@@ -56,8 +57,10 @@ class SimpleRepeatedDistributeBackProjection(SimpleRepeatedBackProjection):
 
         # all remaining cells get the current dfactor
         for (i, j), w in cells:
+            w = 1.0
             cells_finished.append(((i, j), w, dfactor))
 
         for (i, j), w, f in cells_finished:
+            w = 1.0
             self._tmpGrid[i][j] += f * w
             self._tmpGridWeights[i][j] += w

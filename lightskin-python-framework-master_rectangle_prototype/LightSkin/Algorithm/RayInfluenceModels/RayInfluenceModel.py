@@ -10,6 +10,9 @@ class Ray:
     """ A Ray from a given point to another on the cartesian coordinate system. """
 
     def __init__(self, start_x: float, start_y: float, end_x: float, end_y: float):
+        """
+             A line/ray is defined by two points (start, end), described by their x and y coordinates.
+        """
         self.start_x: float = float(start_x)
         self.start_y: float = float(start_y)
         self.end_x: float = float(end_x)
@@ -24,10 +27,12 @@ class Ray:
 
     @property
     def dx(self) -> float:
+        # change in horizontal distance/ length
         return self.end_x - self.start_x
 
     @property
     def dy(self) -> float:
+        # change in vertical distance/ height
         return self.end_y - self.start_y
 
     @property
@@ -36,7 +41,10 @@ class Ray:
         return self.end_x * self.start_y - self.start_x * self.end_y
 
     def point_along_ray(self, d: float, relative=False) -> Tuple[float, float]:
-        """ Returns the point that is the given distance along the ray """
+        """
+            General linear equation is ax + by + c = 0.
+            Returns a point (on the line/ray) that is on a given distance d along the ray.
+        """
         if not relative:
             d /= self.length
         x = self.start_x + d * self.dx
@@ -44,7 +52,7 @@ class Ray:
         return x, y
 
     def distance_of_point_along_ray(self, x_p: Union[float, Tuple[float, float]], y: float = 0.0, relative=False) -> float:
-        """ Returns the distance that the given point lies on along the ray; perpendicular distance is ignored """
+        """ Returns the distance of two points that lie on the ray; perpendicular distance is ignored """
         if isinstance(x_p, tuple):
             x: float = x_p[0]
             y: float = x_p[1]
@@ -58,7 +66,7 @@ class Ray:
         return (self.dx * x + self.dy * y) / self.length
 
     def distance_to_point(self, x_p: Union[float, Tuple[float, float]], y: float = 0.0) -> float:
-        """ Returns the shortest distance from the given point to the infinite line defined by this ray """
+        """ Returns the shortest distance from the given point x_p to the infinite line defined by this ray """
         if isinstance(x_p, tuple):
             x: float = x_p[0]
             y: float = x_p[1]
@@ -67,7 +75,7 @@ class Ray:
         return abs(self.dy * x - self.dx * y + self.c) / self.length
 
     def closest_point_on_line(self, x_p: Union[float, Tuple[float, float]], y: float = 0.0) -> Tuple[float, float]:
-        """ Returns the closest point to the given point that lies on the infinite line defined by this ray """
+        """ Returns the closest point to the given point x_p that lies on the infinite line defined by this ray """
         if isinstance(x_p, tuple):
             x: float = x_p[0]
             y: float = x_p[1]

@@ -71,6 +71,7 @@ class SimpleRepeatedBackProjection(SimpleBackProjection):
         translucencyMul = 1
         for (i, j), w in cells:
             # weighted factorization
+            w = 1.0
             translucencyMul *= self._bufGrid[i][j] ** w
 
         return max(0.0, min(1.0, translucencyMul))

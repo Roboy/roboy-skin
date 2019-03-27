@@ -5,12 +5,11 @@ import time
 
 import tkinter as tk
 
-from LightSkin.Algorithm.Analyze.SensitivityMap import SensitivityMap
+from LightSkin.Algorithm.Analytics.SensitivityMap import SensitivityMap
 from LightSkin.Algorithm.RayInfluenceModels.DirectSampledRayGridInfluenceModel import DirectSampledRayGridInfluenceModel
 from LightSkin.Algorithm.RayInfluenceModels.WideRayGridInfluenceModel import WideRayGridInfluenceModel
 from LightSkin.LightSkin import LightSkin, ValueMap
 from LightSkin.GUI import Views
-
 from LightSkin.Algorithm.ForwardModels.SimpleProportionalForwardModel import SimpleProportionalForwardModel
 
 
@@ -29,20 +28,20 @@ ls = LightSkin()
 
 # LOAD Sensor and LED coordinates from CSV
 
-with open('sensors.csv', 'r') as csvfile:
+with open('CSV_Files/sensors.csv', 'r') as csvfile:
     read = csv.reader(csvfile)
     for r in read:
         s = (float(r[0]), float(r[1]))
         ls.sensors.append(s)
 #
-with open('leds.csv', 'r') as csvfile:
+with open('CSV_Files/leds.csv', 'r') as csvfile:
     read = csv.reader(csvfile)
     for r in read:
         s = (float(r[0]), float(r[1]))
         ls.LEDs.append(s)
 
 gridVals = []
-with open('translucency.csv', 'r') as csvfile:
+with open('CSV_Files/translucency.csv', 'r') as csvfile:
     read = csv.reader(csvfile)
     for r in read:
         vals = list(map(float, r))

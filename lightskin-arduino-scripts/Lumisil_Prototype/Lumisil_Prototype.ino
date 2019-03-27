@@ -12,15 +12,12 @@ const int Sensors[] = {
 };*/
 float vit[20];
 const int LEDs[] = {
-  //27, 29, 31, 33, 35, 37, 39
-  // 51, 44 busted
-  53, 51, 49, 47, 45, 43, 52, 50, 48, 46, 44, 42
-
+  27
 };
 const int Sensors[] = {
-  //A6, A5, A4, A3, A2, A1, A0
-  A15, A14, A13, A12, A11, A10, A9, A8, A7, A6, A5, A4
+  A6, A5
 };
+
 
 // Samples to be measured for each sensor measurement
 const int SAMPLES = 20;
@@ -37,7 +34,7 @@ int l, s, i; // Inner loop variables; so they don't need to be reallocated every
 //char buf[15]; // faster printing
 //char out[500];
 const char* comma = ",";
-SimpleKalmanFilter kf = SimpleKalmanFilter(1, 1, 0.05);
+SimpleKalmanFilter kf = SimpleKalmanFilter(1, 1, 0.1);
 
 void setup() {
   // Increase ADC sampling rate according to
@@ -47,8 +44,8 @@ void setup() {
   cbi(ADCSRA, ADPS0);
 
   // Increase resolution of ADCs in the relevant value range
-  //analogReference(DEFAULT);//INTERNAL1V1);
   analogReference(DEFAULT);//INTERNAL1V1);
+
   for(int i = 0; i < LEDs_num; i++){
     pinMode(LEDs[i], OUTPUT);
     digitalWrite(LEDs[i], LED_OFF);
@@ -78,8 +75,7 @@ void loop() {
     sum = 0;
     for(i = 0; i < SAMPLES; i++){
       long v = analogRead(sensor);
-      sum += v;
-      //Serial.println(v);
+      sum += v;      
     }
     value = (float) sum / SAMPLES;
     //Serial.println(value);
@@ -90,94 +86,70 @@ void loop() {
 // Measure all sensors
     for(s = 0; s < Sensors_num; s++){
       sensor = Sensors[s];
-
+      
       for(l = 0; l < LEDs_num; l++){
         led = LEDs[l];
 
     // switch to new LED
-
+    
         digitalWrite(lastLED, LED_OFF);
-        //delay(30);
+        delay(30);
         digitalWrite(led, LED_ON);
-        delay(4);
-
-
-
-     /* Serial.print("Reading sensor ");
-      Serial.print(Sensors[s]);
-      Serial.print(" for LED ");
-      Serial.print(led);*/
+       
       // Read sensor once to switch ADC circuit to this pin (discard result)
       analogRead(sensor);
 
       sum = 0;
-
+      
       const int vit_leng = sizeof(vit) / sizeof(int);
       for(i = 0; i < SAMPLES; i++){
-        long v = analogRead(sensor);
-        vit[i] = v;
+        long v = analogRead(sensor);  
+        vit[i] = v;      
         sum += v;
-        delay(1);
+        delay(2);
         //Serial.println(v);
       }
-
-
-     /* if (s == 1){
-        for (int i = 0; i < 20; i++){
-          Serial.println(vit[i]);
-        }
-      }*/
+      
       value = (float) sum / SAMPLES;
       // Save last measurements for comparison
       allValues_Old[l][s] = allValues[l][s];
-      //Serial.println(value);
-      //Serial.println(zeroValues[s]);
       allValues[l][s] = max(0, value - zeroValues[s]);
-      //Serial.print(" : ");
-      //Serial.println(allValues[l][s]);
-      //Serial.println("-------------------");
       lastLED = led;
       digitalWrite(lastLED, LED_OFF);
     }
-
-
   }
    digitalWrite(lastLED, LED_OFF);
 
 /*-------------------------------------------------*/
   // Print the measurements to Serial
- /*Serial.print("Matrix snapshot: ");
+ Serial.print("Matrix snapshot: ");
   //Serial.print(LEDs_num);
   Serial.print("x");
   //Serial.print(Sensors_num);
   Serial.println();
 
-int next_sensor = 0;
+  int next_sensor = 60;
   for(s = 0; s < Sensors_num; s++){
-    Serial.print("  ");
-    Serial.print(Sensors[next_sensor]);
-    Serial.print(", ");
-    next_sensor += 1;
+    if (next_sensor < 54 ) break;
+    Serial.print("    ");
+    //Serial.print(next_sensor);
+    Serial.print(",");
+    next_sensor -= 1;
   }
 
   int next_led = 27;
   Serial.println();
-
+  
   for(l = 0; l < LEDs_num; l++){
     //Serial.print(next_led);
     Serial.print("  ");
     next_led += 2;
     for(s = 0; s < Sensors_num; s++){
       Serial.print(allValues[l][s], 2);
-       //Serial.print(kf.updateEstimate(allValues[l][s]), 2);
       Serial.print(',');
     }
     Serial.println();
   }
-  Serial.println();
-  Serial.print(allValues[0][8],2);
-  Serial.print(',');
-  Serial.print(allValues[3][11],2);
   Serial.println();
 
 /*-------------------------------------------------*/
@@ -188,15 +160,16 @@ Serial.print("x");
 Serial.print(Sensors_num);
 Serial.println();
 
-next_sensor = 0;
+next_sensor = 60;
   for(s = 0; s < Sensors_num; s++){
+    if (next_sensor < 54 ) break;
     Serial.print("  ");
-    Serial.print(Sensors[next_sensor]);
-    Serial.print(", ");
-    next_sensor += 1;
+    Serial.print(next_sensor);
+    Serial.print(",");
+    next_sensor -= 1;
   }
 
-next_led = 53;
+next_led = 27;
 float largest_delta = 0;
   Serial.println();
   for(l = 0; l < LEDs_num; l++){
@@ -215,12 +188,12 @@ float largest_delta = 0;
   }
   Serial.println();
   Serial.println(largest_delta);
-  Serial.println("-------------------");
+  Serial.println("-------------------");*/
 
 /*-------------------------------------------------*/
 /*-------------------------------------------------*/
   // Print the measurements to Serial
- Serial.print("Snapshot: ");
+ /* Serial.print("Snapshot: ");
   Serial.print(LEDs_num);
   Serial.print(',');
   Serial.print(Sensors_num);
@@ -229,8 +202,6 @@ float largest_delta = 0;
   for(l = 0; l < LEDs_num; l++){
     for(s = 0; s < Sensors_num; s++){
       Serial.print(allValues[l][s], 2);
-      //Serial.print(',');
-      //Serial.print(kf.updateEstimate(allValues[l][s]), 2);
       Serial.print(',');
     }
     Serial.println();
@@ -239,5 +210,5 @@ float largest_delta = 0;
   /*-------------------------------------------------*/
 
   // Wait for the next snapshot to be taken
-  delay(10);
+  delay(100);
 }
