@@ -8,3 +8,5 @@ variable 'Result' is the data matrix.
 Improved based on the "Calculate value", calculation model is changed.
 ### Draw ray.m
 The first version, just drawing the ray from different LEDs to sensors in 2D, can see the "trap" inside.
+### Mesh.m
+Output is a mesh but looking from down side. Looks fancy but useless.
