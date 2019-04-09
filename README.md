@@ -6,3 +6,6 @@ This repository contains all software files related to the project Roboy Skin. I
 * Simulation - contains Matlab files needed for simulating the behaviour of the skin.
 * Reconstructions - contains all files needed for reconstructing pressure points on the skin as well as reading and displaying the data.
 * Molding - contains all files needed for the creating the molds.
+
+
+### Code status at the end of WS18/19
